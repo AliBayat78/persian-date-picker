@@ -1,0 +1,59 @@
+<div class="form-container">
+  <div
+    #dateInput
+    class="date-input"
+    [class.error]="formValidation()"
+    [formGroup]="formGroup"
+  >
+    <input
+      [(ngModel)]="year"
+      #yearInput
+      formControlName="year"
+      class="firstInput"
+      [class.text-red]="!formGroup.get('year')?.valid"
+      [class.text-red]="yearError()"
+      type="text"
+      maxlength="4"
+      placeholder="____"
+      (blur)="onFocusOut($event, 'year')"
+    />
+    <div class="slash">/</div>
+    <input
+      [(ngModel)]="month"
+      #monthInput
+      formControlName="month"
+      class="secondInput"
+      [class.text-red]="!formGroup.get('month')?.valid"
+      [class.text-red]="monthError()"
+      type="text"
+      maxlength="2"
+      placeholder="__"
+      (blur)="onFocusOut($event, 'month')"
+    />
+    <div class="slash">/</div>
+    <input
+      [(ngModel)]="day"
+      #dayInput
+      formControlName="day"
+      class="thirdInput"
+      [class.text-red]="!formGroup.get('day')?.valid"
+      [class.text-red]="dayError()"
+      type="text"
+      maxlength="2"
+      placeholder="__"
+      (blur)="onFocusOut($event, 'day')"
+    />
+
+    <input
+      class="invisibleInput"
+      matInput
+      [min]="minDate"
+      [max]="maxDate"
+      [matDatepicker]="picker1"
+      [formControl]="calender"
+    />
+  </div>
+
+  <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+</div>

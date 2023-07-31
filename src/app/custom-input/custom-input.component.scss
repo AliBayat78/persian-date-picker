@@ -1,0 +1,60 @@
+.form-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-container::ng-deep {
+  .mat-datepicker-toggle {
+    margin-top: 2rem;
+  }
+}
+
+.date-input {
+  width: fit-content;
+  padding: 2px;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  transition: ease-in-out 0.4s;
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.firstInput {
+  max-width: 35px;
+  width: fit-content;
+  outline: none;
+  border: none;
+}
+
+.secondInput,
+.thirdInput {
+  max-width: 15px;
+  width: fit-content;
+  outline: none;
+  border: none;
+}
+
+.slash {
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invisibleInput {
+  visibility: hidden;
+  position: absolute;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.text-red {
+  caret-color: black;
+  color: red;
+}

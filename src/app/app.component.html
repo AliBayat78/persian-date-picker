@@ -1,0 +1,16 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
+  <app-custom-input
+    formControlName="formGroup.get('customDate1')"
+    (fullDate)="onFullDateChange($event, 'customDate1')"
+  ></app-custom-input>
+  {{ customDate1 }}
+  <!-- 
+
+  <app-custom-input
+    formControlName="formGroup.get('customDate2')"
+    (fullDate)="onFullDateChange($event, 'customDate2')"
+  ></app-custom-input>
+  {{ customDate2 }} -->
+
+  <button type="submit">submit</button>
+</form>
