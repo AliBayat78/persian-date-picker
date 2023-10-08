@@ -25,6 +25,7 @@ import {
 import * as moment from 'jalali-moment';
 
 import * as jalaliMoment from 'jalali-moment';
+import { ServiceService } from '../service.service';
 
 @Component({
   selector: 'app-custom-input',
@@ -108,15 +109,21 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   //* Setting the values of calender inside input and year/month/day values
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private language: ServiceService) {
     this.checkForMinMax();
-
+  
     this.calender.valueChanges.subscribe((selectedDate) => {
       if (selectedDate) {
+        if (this.language.getLanguage() === 'fa'){
         const jalaliDate = jalaliMoment(selectedDate);
         this.year = jalaliDate.jYear().toString();
         this.month = (jalaliDate.jMonth() + 1).toString().padStart(2, '0');
         this.day = jalaliDate.jDate().toString().padStart(2, '0');
+        } else {
+          this.year = selectedDate.getFullYear().toString()
+          this.month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+          this.day = selectedDate.getDate().toString().padStart(2, '0');
+        }
       } else {
         this.year = '';
         this.month = '';
@@ -399,6 +406,7 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
     const value = (event.target as HTMLInputElement).value;
     const maxLength = inputName === 'year' ? 4 : 2;
     if (value.length === maxLength) {
+      this.updateCalender()
       return;
     }
     if (value.length < maxLength && value !== '') {
