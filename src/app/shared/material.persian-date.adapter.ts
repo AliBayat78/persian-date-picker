@@ -252,33 +252,32 @@ export class MaterialPersianDateAdapter extends DateAdapter<jalaliMoment.Moment>
   }
 
   createDate(year: number, month: number, date: number): jalaliMoment.Moment {
-    if (month < 0 || month > 11) {
-      throw Error(
-        `Invalid month index "${month}". Month index has to be between 0 and 11.`
-      );
-    }
-    if (date < 1) {
-      throw Error(`Invalid date "${date}". Date has to be greater than 0.`);
-    }
-    const result = jalaliMoment()
-      .jYear(year)
-      .jMonth(month)
-      .jDate(date)
-      .hours(0)
-      .minutes(0)
-      .seconds(0)
-      .milliseconds(0)
-      .locale('fa')
-      .utc(true);
-
-    if (this.getMonth(result) !== month) {
-      throw Error(`Invalid date ${date} for month with index ${month}.`);
-    }
-    if (!result.isValid()) {
-      throw Error(`Invalid date "${date}" for month with index "${month}".`);
-    }
-    return result;
+  if (month < 0 || month > 11) {
+    throw Error(`Invalid month index "${month}". Month index has to be between 0 and 11.`);
   }
+  if (date < 1) {
+    throw Error(`Invalid date "${date}". Date has to be greater than 0.`);
+  }
+
+  const result = jalaliMoment.utc()
+    .jYear(year)
+    .jMonth(month)
+    .jDate(date)
+    .hours(0)
+    .minutes(0)
+    .seconds(0)
+    .milliseconds(0)
+    .locale('fa');
+
+  if (this.getMonth(result) !== month) {
+    throw Error(`Invalid date ${date} for month with index ${month}.`);
+  }
+  if (!result.isValid()) {
+    throw Error(`Invalid date "${date}" for month with index "${month}".`);
+  }
+
+  return result;
+}
 
   today(): jalaliMoment.Moment {
     return jalaliMoment().locale('fa').utc(true);

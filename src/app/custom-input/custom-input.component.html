@@ -1,59 +1,71 @@
-<div class="form-container">
-  <div
-    #dateInput
-    class="date-input"
-    [class.error]="formValidation()"
-    [formGroup]="formGroup"
-  >
-    <input
-      [(ngModel)]="year"
-      #yearInput
-      formControlName="year"
-      class="firstInput"
-      [class.text-red]="!formGroup.get('year')?.valid"
-      [class.text-red]="yearError()"
-      type="text"
-      maxlength="4"
-      placeholder="____"
-      (blur)="onFocusOut($event, 'year')"
-    />
-    <div class="slash">/</div>
-    <input
-      [(ngModel)]="month"
-      #monthInput
-      formControlName="month"
-      class="secondInput"
-      [class.text-red]="!formGroup.get('month')?.valid"
-      [class.text-red]="monthError()"
-      type="text"
-      maxlength="2"
-      placeholder="__"
-      (blur)="onFocusOut($event, 'month')"
-    />
-    <div class="slash">/</div>
-    <input
-      [(ngModel)]="day"
-      #dayInput
-      formControlName="day"
-      class="thirdInput"
-      [class.text-red]="!formGroup.get('day')?.valid"
-      [class.text-red]="dayError()"
-      type="text"
-      maxlength="2"
-      placeholder="__"
-      (blur)="onFocusOut($event, 'day')"
-    />
+<div style="position: relative">
+  <div class="form-container">
+    <div class="date-container">
+      <mat-label>{{ label }}</mat-label>
+      <div
+        #dateInput
+        class="date-input"
+        [class.error]="formValidation()"
+        [formGroup]="formGroup"
+      >
+        <input
+          [(ngModel)]="year"
+          #yearInput
+          formControlName="year"
+          class="firstInput"
+          [class.text-red]="!formGroup.get('year')?.valid"
+          [class.text-red]="yearError()"
+          type="text"
+          maxlength="4"
+          placeholder="____"
+          (blur)="onFocusOut($event, 'year')"
+        />
+        <div class="slash">/</div>
+        <input
+          [(ngModel)]="month"
+          #monthInput
+          formControlName="month"
+          class="secondInput"
+          [class.text-red]="!formGroup.get('month')?.valid"
+          [class.text-red]="monthError()"
+          type="text"
+          maxlength="2"
+          placeholder="__"
+          (blur)="onFocusOut($event, 'month')"
+        />
+        <div class="slash">/</div>
+        <input
+          [(ngModel)]="day"
+          #dayInput
+          formControlName="day"
+          class="thirdInput"
+          [class.text-red]="!formGroup.get('day')?.valid"
+          [class.text-red]="dayError()"
+          type="text"
+          maxlength="2"
+          placeholder="__"
+          (blur)="onFocusOut($event, 'day')"
+        />
 
-    <input
-      class="invisibleInput"
-      matInput
-      [min]="minDate"
-      [max]="maxDate"
-      [matDatepicker]="picker1"
-      [formControl]="calender"
-    />
+        <input
+          class="invisibleInput"
+          matInput
+          [min]="englishMinDate_Date"
+          [max]="englishMaxDate_Date"
+          [matDatepicker]="picker1"
+          [formControl]="calender"
+        />
+      </div>
+    </div>
+    <div class="date-picker-container">
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker1"
+      ></mat-datepicker-toggle>
+      <mat-datepicker dir="rtl" #picker1></mat-datepicker>
+    </div>
   </div>
-
-  <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-  <mat-datepicker #picker1></mat-datepicker>
+  <span class="text-red" *ngIf="formGroup.touched && formGroup.invalid"
+    >تاریخ صحیح نیست</span
+  >
 </div>

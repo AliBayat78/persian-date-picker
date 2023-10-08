@@ -1,32 +1,55 @@
 .form-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.form-container::ng-deep {
-  .mat-datepicker-toggle {
-    margin-top: 2rem;
-  }
+  // display: flex;
+  // flex-direction: row;
+  // align-items: center;
+  height: max-content;
+  direction: ltr;
+  position: relative;
 }
 
 .date-input {
   width: fit-content;
-  padding: 2px;
-  border: 1px solid gray;
+  border-bottom: 1px solid gray;
+
   display: flex;
   flex-direction: row;
   position: relative;
   transition: ease-in-out 0.4s;
-  margin-top: 2rem;
-  margin-left: 2rem;
+}
+
+.date-container {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.date-container > mat-label {
+  position: relative;
+  top: 0;
+  right: 17px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.date-picker-container {
+  position: absolute;
+  bottom: 22px;
+  left: 64px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .firstInput {
-  max-width: 35px;
   width: fit-content;
+  max-width: 29px;
   outline: none;
   border: none;
+  background-color: transparent;
+  color: var(--textColor);
 }
 
 .secondInput,
@@ -35,11 +58,13 @@
   width: fit-content;
   outline: none;
   border: none;
+  background-color: transparent;
+  color: var(--textColor);
 }
 
 .slash {
   font-weight: bold;
-  color: #000;
+  color: var(--textColor);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -51,10 +76,23 @@
 }
 
 .error {
-  border: 1px solid red;
+  border-bottom: 1px solid var(--failColor) !important;
 }
 
 .text-red {
   caret-color: black;
-  color: red;
+  color: var(--failColor);
+  font-size: 11px;
+  position: absolute;
+  // right: 30px;
+  // top: 40px;
+}
+
+::ng-deep .mat-datepicker-toggle {
+  zoom: 0.65;
+  color: var(--textColor);
+}
+
+mat-label {
+  color: var(--textColor);
 }

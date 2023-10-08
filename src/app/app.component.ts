@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -7,8 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  minDate1 = new Date('2023/07/31');
-
+  minDate1 = '1200/01/10'
+  maxDate1 = '1600/01/01'
   constructor(private fb: FormBuilder) {
     this.formGroup = fb.group({
       customDate1: ['', [Validators.required]],
@@ -23,10 +23,6 @@ export class AppComponent {
 
   get customDate1(): string {
     return this.formGroup.get('customDate1')?.value;
-  }
-
-  get customDate2(): string {
-    return this.formGroup.get('customDate2')?.value;
   }
 
   onSubmit() {
