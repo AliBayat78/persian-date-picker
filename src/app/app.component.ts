@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ServiceService } from './service.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { LanguageService } from './language.service';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +8,13 @@ import { ServiceService } from './service.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  minDate1 = '1300/01/10'
-  maxDate1 = '1500/01/01'
-  constructor(private fb: FormBuilder, private languageService: ServiceService) {
-    this.formGroup = fb.group({
-      customDate1: ['', [Validators.required]],
-    });
-  }
+  minDate1 = '1315/01/02'
+  maxDate1 = '1500/01/02'
+  constructor(private languageService: LanguageService) {}
 
-  formGroup: FormGroup = new FormGroup({});
+  formGroup: FormGroup = new FormGroup({
+    customDate1: new FormControl('', Validators.required)
+  });
 
   onFullDateChange(selectedDate: string, formControlName: string) {
     this.formGroup.get(formControlName)?.setValue(selectedDate);

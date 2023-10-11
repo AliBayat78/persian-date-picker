@@ -1,18 +1,8 @@
 <form class="form" (ngSubmit)="onSubmit()" [formGroup]="formGroup">
   <app-custom-input
-[minDate]="minDate1"
-[maxDate]="maxDate1"
-    formControlName="formGroup.get('customDate1')"
     (fullDate)="onFullDateChange($event, 'customDate1')"
   ></app-custom-input>
   {{ customDate1 }}
-  <!-- 
-
-  <app-custom-input
-    formControlName="formGroup.get('customDate2')"
-    (fullDate)="onFullDateChange($event, 'customDate2')"
-  ></app-custom-input>
-  {{ customDate2 }} -->
 
   <button style="margin-top: 1rem;" type="submit">submit</button>
 </form>

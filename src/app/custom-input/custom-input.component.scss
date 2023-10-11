@@ -1,10 +1,18 @@
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
+}
+
 .form-container {
   // display: flex;
   // flex-direction: row;
   // align-items: center;
   height: max-content;
-  direction: ltr;
   position: relative;
+  width: fit-content;
 }
 
 .date-input {
@@ -49,7 +57,7 @@
   outline: none;
   border: none;
   background-color: transparent;
-  color: var(--textColor);
+  direction: ltr;
 }
 
 .secondInput,
@@ -59,7 +67,7 @@
   outline: none;
   border: none;
   background-color: transparent;
-  color: var(--textColor);
+  direction: ltr;
 }
 
 .slash {
@@ -76,23 +84,19 @@
 }
 
 .error {
-  border-bottom: 1px solid var(--failColor) !important;
+  border-bottom: 1px solid red !important;
 }
 
 .text-red {
   caret-color: black;
-  color: var(--failColor);
+  color: red;
   font-size: 11px;
   position: absolute;
   // right: 30px;
   // top: 40px;
+  white-space: nowrap;
 }
 
 ::ng-deep .mat-datepicker-toggle {
   zoom: 0.65;
-  color: var(--textColor);
-}
-
-mat-label {
-  color: var(--textColor);
 }

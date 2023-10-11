@@ -258,8 +258,7 @@ export class MaterialPersianDateAdapter extends DateAdapter<jalaliMoment.Moment>
   if (date < 1) {
     throw Error(`Invalid date "${date}". Date has to be greater than 0.`);
   }
-
-  const result = jalaliMoment.utc()
+  const result = jalaliMoment().utc(true)
     .jYear(year)
     .jMonth(month)
     .jDate(date)

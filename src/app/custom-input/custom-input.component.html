@@ -1,5 +1,5 @@
 <div style="position: relative">
-  <div class="form-container">
+  <div [ngClass]="{'ltr': currentLanguage === 'fa', 'rtl': currentLanguage === 'en'}" class="form-container">
     <div class="date-container">
       <mat-label>{{ label }}</mat-label>
       <div
@@ -22,6 +22,7 @@
         />
         <div class="slash">/</div>
         <input
+          *ngIf="currentLanguage === 'fa'"
           [(ngModel)]="month"
           #monthInput
           formControlName="month"
@@ -33,8 +34,8 @@
           placeholder="__"
           (blur)="onFocusOut($event, 'month')"
         />
-        <div class="slash">/</div>
         <input
+          *ngIf="currentLanguage === 'en'"
           [(ngModel)]="day"
           #dayInput
           formControlName="day"
@@ -45,6 +46,33 @@
           maxlength="2"
           placeholder="__"
           (blur)="onFocusOut($event, 'day')"
+        />
+        <div class="slash">/</div>
+        <input
+          *ngIf="currentLanguage === 'fa'"
+          [(ngModel)]="day"
+          #dayInput
+          formControlName="day"
+          class="thirdInput"
+          [class.text-red]="!formGroup.get('day')?.valid"
+          [class.text-red]="dayError()"
+          type="text"
+          maxlength="2"
+          placeholder="__"
+          (blur)="onFocusOut($event, 'day')"
+        />
+        <input
+          *ngIf="currentLanguage === 'en'"
+          [(ngModel)]="month"
+          #monthInput
+          formControlName="month"
+          class="secondInput"
+          [class.text-red]="!formGroup.get('month')?.valid"
+          [class.text-red]="monthError()"
+          type="text"
+          maxlength="2"
+          placeholder="__"
+          (blur)="onFocusOut($event, 'month')"
         />
 
         <input
@@ -62,10 +90,10 @@
         matIconSuffix
         [for]="picker1"
       ></mat-datepicker-toggle>
-      <mat-datepicker dir="rtl" #picker1></mat-datepicker>
+      <mat-datepicker [dir]="currentLanguage === 'fa' ? 'rtl' : 'ltr'" #picker1></mat-datepicker>
     </div>
   </div>
   <span class="text-red" *ngIf="formGroup.touched && formGroup.invalid"
-    >تاریخ صحیح نیست</span
+    >{{currentLanguage === 'fa' ? 'تاریخ صحیح نمی باشد' : 'Invalid Date'}}</span
   >
 </div>

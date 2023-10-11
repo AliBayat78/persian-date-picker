@@ -21,13 +21,14 @@ import {
   MaterialPersianDateAdapter,
   PERSIAN_DATE_FORMATS,
 } from './shared/material.persian-date.adapter';
-import { ServiceService } from './service.service';
+import { LanguageService } from './language.service';
 
-export function dateAdapterFactory(languageService: ServiceService) {
+
+export function dateAdapterFactory(languageService: LanguageService) {
   return languageService.getLanguage() === 'fa' ? new MaterialPersianDateAdapter() : new NativeDateAdapter('en-US');
 }
 
-export function dateFormatsFactory(languageService: ServiceService) {
+export function dateFormatsFactory(languageService: LanguageService) {
  return languageService.getLanguage() === 'fa' ? PERSIAN_DATE_FORMATS : MAT_NATIVE_DATE_FORMATS;
 }
 @NgModule({
@@ -50,8 +51,8 @@ export function dateFormatsFactory(languageService: ServiceService) {
     //   deps: [MAT_DATE_LOCALE],
     // },
     // { provide: MAT_DATE_FORMATS, useValue: PERSIAN_DATE_FORMATS },
-    { provide: DateAdapter, useFactory: dateAdapterFactory, deps: [ServiceService, MAT_DATE_LOCALE] },
-          { provide: MAT_DATE_FORMATS, useFactory: dateFormatsFactory, deps: [ServiceService] }
+    { provide: DateAdapter, useFactory: dateAdapterFactory, deps: [LanguageService, MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useFactory: dateFormatsFactory, deps: [LanguageService] }
   ],
   bootstrap: [AppComponent],
 })

@@ -25,7 +25,7 @@ import {
 import * as moment from 'jalali-moment';
 
 import * as jalaliMoment from 'jalali-moment';
-import { ServiceService } from '../service.service';
+import { LanguageService } from '../language.service';
 
 @Component({
   selector: 'app-custom-input',
@@ -38,6 +38,8 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
   @Input() maxDate: string = '';
   englishMinDate_Date?: Date;
   englishMaxDate_Date?: Date;
+
+  currentLanguage = this.language.getLanguage()
 
   @Input() label: string = '';
 
@@ -63,8 +65,8 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
 
   updateInputs() {
     if (this.defaultValues) {
+      if (this.currentLanguage === 'fa'){
       const parts = this.defaultValues.split('/');
-
       this.year = parts[0] || '';
       this.month = parts[1] || '';
       this.day = parts[2] || '';
@@ -87,6 +89,20 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
         this.calender.setValue(updatedDate);
       }
       this.emitFullDate();
+    } else {
+      const defaultDate = this.stringToDate(this.defaultValues)
+      const englishDefaultDate = this.persianToEnglishDate(defaultDate)
+
+      this.year = englishDefaultDate!.getFullYear().toString()
+      this.month = englishDefaultDate!.getMonth().toString()
+      this.day = englishDefaultDate!.getDate().toString()
+      if (
+        this.formGroup.status === 'VALID' 
+      ) {
+        this.calender.setValue(englishDefaultDate!);
+      }
+      this.emitFullDate();
+    }
     }
   }
 
@@ -109,7 +125,7 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
   }
 
   //* Setting the values of calender inside input and year/month/day values
-  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private language: ServiceService) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private language: LanguageService) {
     this.checkForMinMax();
   
     this.calender.valueChanges.subscribe((selectedDate) => {
@@ -149,12 +165,18 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
       !isNaN(monthNumber) &&
       !isNaN(dayNumber)
     ) {
-      const englishDate = moment
+      if (this.currentLanguage === 'fa') {
+        const englishDate = moment
         .from(`${this.year}/${this.month}/${this.day}`, 'fa', 'YYYY/MM/DD')
         .format('YYYY/MM/DD');
-      const updatedDate = this.stringToDate(englishDate);
+        const updatedDate = this.stringToDate(englishDate);
 
-      this.calender.setValue(updatedDate);
+        this.calender.setValue(updatedDate);
+      } else {
+        const updatedDate = new Date(`${this.month}/${this.day}/${this.year}`)
+        this.calender.setValue(updatedDate);
+      }
+      
     }
   }
 
@@ -192,11 +214,11 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
   checkForMinMax() {
     setTimeout(() => {
       const minDateFormat = this.stringToDate(this.minDate);
-      const newMinDate = this.convertPersianDateToEnglish(minDateFormat!);
+      const newMinDate = this.persianToEnglishDate(minDateFormat!);
       this.englishMinDate_Date = newMinDate;
 
       const maxDateFormat = this.stringToDate(this.maxDate);
-      const newMaxDate = this.convertPersianDateToEnglish(maxDateFormat!);
+      const newMaxDate = this.persianToEnglishDate(maxDateFormat!);
       this.englishMaxDate_Date = newMaxDate;
     }, 0);
   }
@@ -252,18 +274,20 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
 
   dateRangeValidator(minDate: string, maxDate: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const selectedDate = new Date(
+      const selectedDate = this.currentLanguage === 'fa' ? 
+      new Date(
         `${control.value.year}/${control.value.month}/${control.value.day}`
+      ) : new Date(
+        `${control.value.month}/${control.value.day}/${control.value.year}`
       );
-
       if (minDate) {
-        const newMinDate_Date = this.stringToDate(minDate);
+        const newMinDate_Date = this.currentLanguage === 'fa' ? this.stringToDate(minDate) : this.persianToEnglishDate(this.stringToDate(minDate));
         if (newMinDate_Date && selectedDate < newMinDate_Date) {
           return { minDate: true };
         }
       }
       if (maxDate) {
-        const newMaxDate_Date = this.stringToDate(maxDate);
+        const newMaxDate_Date = this.currentLanguage === 'fa' ? this.stringToDate(maxDate) : this.persianToEnglishDate(this.stringToDate(maxDate));
         if (newMaxDate_Date && selectedDate > newMaxDate_Date) {
           return { maxDate: true };
         }
@@ -324,8 +348,8 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
     return null;
   }
 
-  convertPersianDateToEnglish(persianDate: Date | null): Date | undefined {
-    if (persianDate === null) return undefined;
+  persianToEnglishDate(persianDate: Date | null): Date | undefined {
+    if (persianDate === null) return;
     const year = persianDate.getFullYear();
     const month = persianDate.getMonth() + 1;
     const day = persianDate.getDate();
@@ -374,7 +398,7 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
     if (!this.isNumericInput(event)) {
       this.year = (event.target as HTMLInputElement).value.replace(/\D/g, '');
     }
-    if (this.year.length === 4) {
+    if (this.year.length === 4 && this.currentLanguage === 'fa') {
       this.monthInput.nativeElement.focus();
     }
 
@@ -385,8 +409,11 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
     if (!this.isNumericInput(event)) {
       this.month = (event.target as HTMLInputElement).value.replace(/\D/g, '');
     }
-    if (this.year.length === 4 && this.month.length === 2) {
+    if (this.year.length === 4 && this.month.length === 2 && this.currentLanguage === 'fa') {
       this.dayInput.nativeElement.focus();
+    }
+    if (this.month.length === 2 && this.currentLanguage === 'en') {
+      this.dayInput.nativeElement.focus()
     }
 
     this.emitFullDate();
@@ -395,6 +422,9 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
   onDayInput(event: KeyboardEvent): void {
     if (!this.isNumericInput(event)) {
       this.day = (event.target as HTMLInputElement).value.replace(/\D/g, '');
+    }
+    if (this.currentLanguage === 'en' && this.day.length === 2) {
+      this.yearInput.nativeElement.focus()
     }
 
     this.emitFullDate();
@@ -425,15 +455,31 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
     const day = this.dayInput.nativeElement;
 
     if (key === 'ArrowRight') {
-      if (activeElement === year) {
-        if (year.selectionEnd === year.value.length) {
-          month.focus();
+      if (this.currentLanguage === 'fa') {
+        if (activeElement === year) {
+          if (year.selectionEnd === year.value.length) {
+            month.setSelectionRange(month.value.length, 0);
+            month.focus();
+          }
+        } else if (activeElement === month) {
+          if (month.selectionEnd === month.value.length) {
+            day.setSelectionRange(day.value.length, 0);
+            day.focus();
+          }
         }
-      } else if (activeElement === month) {
-        if (month.selectionEnd === month.value.length) {
-          day.focus();
+      } else {
+        if (activeElement === month) {
+          if (month.selectionEnd === month.value.length) {
+            day.setSelectionRange(month.value.length, 0)
+            day.focus()
+          }
+        } else if (activeElement === day) {
+          if (day.selectionEnd === day.value.length) {
+            year.setSelectionRange(year.value.length, 0);
+            year.focus();
+          }
         }
-      }
+      } 
     } else if (
       key === 'ArrowLeft' ||
       (key === 'Backspace' && activeElement.selectionStart === 0)
@@ -443,14 +489,21 @@ export class CustomInputComponent implements AfterViewInit, OnInit, OnChanges {
           setTimeout(() => {
             month.setSelectionRange(month.value.length, month.value.length);
             month.focus();
-          }, 0);
+          })
         }
-      } else if (activeElement === month) {
+      } else if (activeElement === month && this.currentLanguage === 'fa') {
         if (month.selectionStart === 0) {
           setTimeout(() => {
             year.setSelectionRange(year.value.length, year.value.length);
             year.focus();
-          }, 0);
+          })
+        }
+      } else if (activeElement === year && this.currentLanguage === 'en') {
+        if (year.selectionStart === 0) {
+          setTimeout(() => {
+            day.setSelectionRange(day.value.length, day.value.length)
+            day.focus()
+          })
         }
       }
     } else if (key === 'Backspace') {
